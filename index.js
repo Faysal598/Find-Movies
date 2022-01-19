@@ -11,6 +11,15 @@ const fetchData = async (searchTerm)=> {
 }
 
 const input = document.querySelector('input');
-input.addEventListener('input', (e)=>{
-    fetchData(e.target.value);
-})
+//delaying search input
+let timeOutId;
+const onInput = e => {
+    if(timeOutId){
+        clearTimeout(timeOutId);
+    }
+
+    timeOutId = setTimeout(() => {
+        fetchData(e.target.value);
+    }, 1000)
+}
+input.addEventListener('input', onInput);
