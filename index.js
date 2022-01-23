@@ -1,4 +1,4 @@
-const fetchData = async (searchTerm)=> {
+const fetchData = async (searchTerm) => {
     //we have to wait for getting response from the url
     const response = await axios.get('http://www.omdbapi.com/', { 
         //this object will turned into string and append it at the end of the url
@@ -7,26 +7,26 @@ const fetchData = async (searchTerm)=> {
             s: searchTerm //movie we want to search
         }
     });
-    console.log(response.data);
+    
+    if(response.data.Error){
+        return [];
+    }
+    
+    return response.data.Search;
 }
 
 const input = document.querySelector('input');
-//debouncing search input
-const debounce = (func, delay)=>{
-    let timeoutId;
 
-    return (...args) =>{
-        if(timeoutId){
-            clearTimeout(timeoutId);
-        }
-
-        timeoutId = setTimeout(()=>{
-            func.apply(null, args);
-        }, delay)
-    } 
-}
-
-const onInput = event => {
-    fetchData(event.target.value);
+const onInput = async event => {
+    const movies = await fetchData(event.target.value);
+    
+    for (let movie of movies) {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <img src = "${movie.Poster}"/>
+            <h2>${movie.Title}</h2>
+        `; 
+    document.querySelector('#target').appendChild(div);
+    }
 }
 input.addEventListener('input', debounce(onInput, 500));
