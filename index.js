@@ -7,7 +7,7 @@ const fetchData = async (searchTerm) => {
             s: searchTerm //movie we want to search
         }
     });
-    
+    //if desired movie doesn't show
     if(response.data.Error){
         return [];
     }
@@ -32,13 +32,17 @@ const resultWrapper = document.querySelector('.result');
 
 const onInput = async event => {
     const movies = await fetchData(event.target.value);
+    //প্রথম বার ইনপুট দেওয়ার পর আবার ইনপুট দেওয়ার জন্য
+    resultWrapper.innerHTML = '';
     
     dropdown.classList.add('is-active');
     for (let movie of movies) {
         const options = document.createElement('a');
+        const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
+
         options.classList.add('dropdown-item');
         options.innerHTML = `
-            <img src = "${movie.Poster}"/>
+            <img src = "${imgSrc}"/>
             ${movie.Title}
         `; 
         resultWrapper.appendChild(options);
