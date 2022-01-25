@@ -32,6 +32,11 @@ const resultWrapper = document.querySelector('.result');
 
 const onInput = async event => {
     const movies = await fetchData(event.target.value);
+    //if there is nothing to show then close the widget
+    if(!movies.length){
+        dropdown.classList.remove('is-active');
+        return;
+    }
     //প্রথম বার ইনপুট দেওয়ার পর আবার ইনপুট দেওয়ার জন্য
     resultWrapper.innerHTML = '';
     
@@ -49,3 +54,10 @@ const onInput = async event => {
     }
 }
 input.addEventListener('input', debounce(onInput, 500));
+//if user clicks outside the root then close the widget
+document.addEventListener('click', e=>{
+    if(!root.contains(e.target)){
+        dropdown.classList.remove('is-active');
+       
+    }
+})
